@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:intl/intl.dart';
-import 'package:barcode/barcode.dart' as bc;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -89,8 +88,6 @@ class PdfService {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Expanded(child: _declarationSection()),
-                      pw.SizedBox(width: 16),
-                      _qrBox(valuation.id),
                     ],
                   ),
                   pw.SizedBox(height: 24),
@@ -218,22 +215,7 @@ class PdfService {
     );
   }
 
-  static pw.Widget _qrBox(String valuationId) {
-    return pw.Column(children: [
-      pw.Text('QR Code'),
-      pw.SizedBox(height: 6),
-      pw.Container(
-        padding: const pw.EdgeInsets.all(6),
-        decoration: pw.BoxDecoration(border: pw.Border.all(color: PdfColors.black)),
-        child: pw.BarcodeWidget(
-          barcode: bc.Barcode.qrCode(),
-          data: 'nakoda://valuation/$valuationId',
-          width: 100,
-          height: 100,
-        ),
-      ),
-    ]);
-  }
+  // QR code intentionally skipped as per requirement.
 
   static pw.Widget _signatures(ValuerProfile profile) {
     return pw.Row(
