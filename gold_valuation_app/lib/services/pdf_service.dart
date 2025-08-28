@@ -114,7 +114,7 @@ class PdfService {
       child: pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.end,
         children: [
-          pw.Text('NAKODA JEWELLERS', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+          pw.Text('NAKODA JEWELERS', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
           pw.Text('Near Community Hall, Sector 14, Hiran Magri,'),
           pw.Text('Udaipur (Raj.) – 313002'),
           if (profile.phone.isNotEmpty)
