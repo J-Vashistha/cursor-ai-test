@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
+// pdf.dart import removed as no longer used directly
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
@@ -21,16 +21,6 @@ class PdfService {
     final doc = pw.Document();
 
     final DateFormat df = DateFormat('dd-MM-yyyy');
-
-    // Try to load logo if provided
-    pw.ImageProvider? logoImage;
-    if (profile.logoFilePath != null && profile.logoFilePath!.isNotEmpty) {
-      final f = File(profile.logoFilePath!);
-      if (await f.exists()) {
-        final bytes = await f.readAsBytes();
-        logoImage = pw.MemoryImage(bytes);
-      }
-    }
 
     doc.addPage(
       pw.MultiPage(
@@ -61,7 +51,7 @@ class PdfService {
               pw.Column(
                 crossAxisAlignment: pw.CrossAxisAlignment.stretch,
                 children: [
-                  _header(profile, logoImage),
+                  _header(profile),
                   pw.SizedBox(height: 12),
                   pw.Center(
                     child: pw.Text('GOLD LOAN VALUATION CERTIFICATE', style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
@@ -118,32 +108,19 @@ class PdfService {
     await Printing.layoutPdf(onLayout: (_) async => await file.readAsBytes());
   }
 
-  static pw.Widget _header(ValuerProfile profile, pw.ImageProvider? logoImage) {
-    return pw.Row(
-      mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: pw.CrossAxisAlignment.center,
-      children: [
-        pw.Container(
-          width: 80,
-          height: 80,
-          decoration: pw.BoxDecoration(border: pw.Border.all(color: PdfColors.black)),
-          alignment: pw.Alignment.center,
-          child: logoImage != null ? pw.Image(logoImage) : pw.Text('LOGO'),
-        ),
-        pw.SizedBox(width: 12),
-        pw.Expanded(
-          child: pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.end,
-            children: [
-              pw.Text('NAKODA JEWELLERS', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
-              pw.Text('Near Community Hall, Sector 14, Hiran Magri,'),
-              pw.Text('Udaipur (Raj.) – 313002'),
-              if (profile.phone.isNotEmpty)
-                pw.Text('Phone: ${profile.phone}${profile.email != null && profile.email!.isNotEmpty ? ' | Email: ${profile.email}' : ''}'),
-            ],
-          ),
-        ),
-      ],
+  static pw.Widget _header(ValuerProfile profile) {
+    return pw.Align(
+      alignment: pw.Alignment.centerRight,
+      child: pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.end,
+        children: [
+          pw.Text('NAKODA JEWELLERS', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+          pw.Text('Near Community Hall, Sector 14, Hiran Magri,'),
+          pw.Text('Udaipur (Raj.) – 313002'),
+          if (profile.phone.isNotEmpty)
+            pw.Text('Phone: ${profile.phone}${profile.email != null && profile.email!.isNotEmpty ? ' | Email: ${profile.email}' : ''}'),
+        ],
+      ),
     );
   }
 
